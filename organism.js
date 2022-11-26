@@ -11,20 +11,22 @@ const mockUpStrand = () => {
       newStrand.push(returnRandBase())
     }
     return newStrand
-  }
+    }
 
 // create an object factory with 2 attributes and 3 methods
-// dna stored in an array
+// dna strand stored in an array
+// returns an organism object
 const organismFactory = (num, arr) => {
     return {
         specimenNum: num, 
         dna: arr, 
         
-        // this method will mutate the dna strand
+        // this method will mutate the dna strand at one location
         mutate() {   
             let random = returnRandBase();
             let randIndex = Math.floor(Math.random() * 15);
             let value = this.dna[randIndex];
+            // need to ensure that the base does get changed to a different value
             while (random === value) {
                 randIndex = Math.floor(Math.random() * 15);
                 value = this.dna[randIndex];
@@ -33,17 +35,17 @@ const organismFactory = (num, arr) => {
             }, 
         
         // this method compares the DNA strands of 2 organisms
+        // looks at the value and the location and checks sameness
+        // logs a message to the console about the percentage of DNA in common
         compareDNA(organism) {
             let same = 0;
             for (let i = 0; i < 15; i++) {
-                let one = this.dna[i];
-                let two = organism.dna[i];
-                if (one === two) {
+                if (this.dna[i] === organism.dna[i]) {
                     same++;
                 }
                 }
             let percent = same / 15 * 100;
-            console.log("specimen #" + this.specimenNum + " and specimen #" + pAequor.specimenNum + " have " + percent.toFixed(0) + "% DNA in common");
+            console.log("specimen #" + this.specimenNum + " and specimen #" + organism.specimenNum + " have " + percent.toFixed(0) + "% DNA in common");
             },
         
         // this method calculates the likelihood of the organism surviving
@@ -64,13 +66,13 @@ const organismFactory = (num, arr) => {
 
 // creating an array of 30 organisms likely to survive
 canSurvive = [];
-it = 0;
-while (canSurvive.length < 30) {
+iter = 1;
+while (canSurvive.length <= 30) {
     let strand = mockUpStrand();
-    let org = organismFactory(it, strand);
+    let org = organismFactory(iter, strand);
     if (org.willLikelySurvive()) {
       canSurvive.push(org.dna);
-      it++;
+      iter++;
     }
   }
   
